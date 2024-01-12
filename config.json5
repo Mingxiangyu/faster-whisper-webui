@@ -34,10 +34,11 @@
         //    // HuggingFace models are loaded using the HuggingFace transformers library and then converted to Whisper models.
         //    "type": "huggingface",
         //},
-        //{
-        //    "name": "local-model",
-        //    "url": "path/to/local/model",
-        //},
+        {
+            "name": "local-model",
+            "url": "/home/workspeace/faster-whisper-large-v3",
+            "type": "faster-whisper",
+        },
         //{
         //    "name": "remote-model",
         //    "url": "https://example.com/path/to/model",
@@ -52,7 +53,7 @@
     // True to share the app on HuggingFace.
     "share": false,
     // The host or IP to bind to. If None, bind to localhost.
-    "server_name": null,
+    "server_name": "0.0.0.0",
     // The port to bind to.
     "server_port": 7860,
     // The number of workers to use for the web server. Use -1 to disable queueing.
@@ -68,7 +69,7 @@
     "whisper_implementation": "faster-whisper",
 
     // The default model name.
-    "default_model_name": "medium",
+    "default_model_name": "local-model",
     // The default VAD.
     "default_vad": "silero-vad",
     // A commma delimited list of CUDA devices to use for parallel processing. If None, disable parallel processing.
@@ -128,5 +129,6 @@
     // If the average log probability is lower than this value, treat the decoding as failed
     "logprob_threshold": -1.0,
     // If the probability of the <no-speech> token is higher than this value AND the decoding has failed due to `logprob_threshold`, consider the segment as silence
-    "no_speech_threshold": 0.6
+    "no_speech_threshold": 0.6,
+    "java_url": null,
 }

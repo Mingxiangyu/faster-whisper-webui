@@ -58,8 +58,9 @@ class ApplicationConfig:
                  condition_on_previous_text: bool = True, fp16: bool = True,
                  compute_type: str = "float16", 
                  temperature_increment_on_fallback: float = 0.2, compression_ratio_threshold: float = 2.4,
-                 logprob_threshold: float = -1.0, no_speech_threshold: float = 0.6):
-        
+                 logprob_threshold: float = -1.0, no_speech_threshold: float = 0.6,
+                 java_url: str = None):
+
         self.models = models
         
         # WebUI settings
@@ -103,7 +104,8 @@ class ApplicationConfig:
         self.compression_ratio_threshold = compression_ratio_threshold
         self.logprob_threshold = logprob_threshold
         self.no_speech_threshold = no_speech_threshold
-        
+        self.java_url = java_url
+
     def get_model_names(self):
         return [ x.name for x in self.models ]
 
