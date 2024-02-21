@@ -1,5 +1,6 @@
 import argparse
 import os
+import traceback
 import warnings
 from typing import Union, List
 from urllib.parse import urlparse
@@ -8,7 +9,7 @@ import numpy as np
 import pydantic
 import requests
 import uvicorn
-from fastapi import FastAPI, Body, BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks
 from pydantic import BaseModel
 from starlette import status
 from starlette.middleware.cors import CORSMiddleware
@@ -20,7 +21,6 @@ from src.download import download_url
 from src.languages import get_language_names
 from src.utils import optional_float, optional_int, str2bool
 from src.whisper.whisperFactory import create_whisper_container
-from fastapi.staticfiles import StaticFiles
 
 
 async def document():
@@ -103,10 +103,8 @@ def cli(audio_path, task_id):
 
             result = transcriber.transcribe_file(model, source_path, temperature=temperature, vadOptions=vadOptions,
                                                  **args)
-            print("result: "+result)
 
             segments = result.get("segments")
-            print("segments: "+segments)
             text_set = [seg["text"] for seg in segments]
             print(text_set)
             print("\n ************************************")
@@ -114,6 +112,7 @@ def cli(audio_path, task_id):
             payload["state"] = True
         except Exception as e:
             print(f"发生错误：-- {e}")
+            traceback.print_exc()
             payload["state"] = False
         response = requests.post(java_url, json=payload)
         print(f"响应结果为：-- {response.text}")
@@ -142,7 +141,7 @@ def api_start(host, port):
 
     app.get("/", response_model=BaseResponse)(document)
 
-    app.post("/convert-text", response_model=BaseResponse)(api_cli)
+    app.get("/convert-text", response_model=BaseResponse)(api_cli)
 
     # 全局模型初始化
     @app.on_event("startup")
